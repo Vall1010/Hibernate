@@ -1,0 +1,80 @@
+##########
+JAVA FILE 
+##########
+
+package jdbc;
+//IMPORT 2 IMPORTS
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class TestJdbc {
+
+	public static void main(String[] args) {
+								//userName        //pass   
+		String url="jdbc: //--URL here--// ";
+		String user=" //--username here--//";
+		String pass=" //--password here--//";
+
+		try {
+			
+	//import class connection,   obj name,  driver mgr class,   GET CON function     parameters.
+			Connection myConn = DriverManager.getConnection(url,user,pass);
+			//if url has username and password then you can delete other variables 
+			
+			System.out.println("CONNECTION SUCCESSFUL !!! ");
+		}catch(Exception e){
+			
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+}
+
+
+#################
+Hibernate config
+#################
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+	
+	<property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+	<property name="connection.connection.url">jdbc: //--URL here--// </property>
+	<property name="connection.username"> //--username here--// </property>
+	<property name="connection.password"> //--password here--// </property>
+	
+	
+	
+	
+	<!-- Pool: used for multi threading-->
+	<!-- collection of connections-->
+	
+	<!-- 1 connection at a time-->																
+	<property name ="connection.pool_size">1</property>
+	
+	
+	<!-- Language /dialect used-->
+	
+	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+	
+	<!-- Echo : message returned after action is executed Ex: Table created-->
+	
+	<property name="show_sql">true</property>
+
+	
+	<!-- Current session -->
+	
+	<property name="current_session_context_class">thread</property>
+	
+	</session-factory>
+
+
+</hibernate-configuration>
