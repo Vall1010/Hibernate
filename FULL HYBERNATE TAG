@@ -1,0 +1,242 @@
+########
+TEST JDBC
+#########
+
+
+
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class TestJDBC {
+
+	public static void main(String[] args) {
+
+		//pass   
+		String url="*************************";
+		String user="*************************";
+		String pass="*************************";
+
+		try {
+
+			//import class connection,   obj name,  driver mgr class,   GET CON function     parameters.
+			Connection myConn = DriverManager.getConnection(url,user,pass);
+			//if url has username and password then you can delete other variables 
+
+			System.out.println("CONNECTION SUCCESSFUL !!! ");
+		}catch(Exception e){
+
+		e.printStackTrace();
+		}
+
+
+	}
+
+	}
+
+
+
+
+#################
+HYBERNATE CONFIG
+#################
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+		<hibernate-configuration>   
+        
+        <session-factory>
+        
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+		<property name="connection.url">jdbc:*************************</property>
+		<property name="connection.username">*************************</property>
+		<property name="connection.password">*************************</property>
+	
+	
+		<!-- Connection pool -->
+		<property name="connection.pool_size">1</property>
+		
+		
+		<!-- Dialect-->
+		
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        
+        
+        <!-- Echo -->
+		
+		<property name="show_sql">true</property>
+        
+        <!-- Current session context -->
+        
+        <property name="current_session_context_class">thread</property>
+        
+        </session-factory>
+        
+        
+        </hibernate-configuration>
+        
+        
+
+###################
+JAVA CLASS MAPPING
+###################
+
+package entity;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Id;
+
+@Entity
+@Table(name="Instructor")
+
+public class Instructor {
+
+	//CREATE VARIABLES BASED ON DATABASE COLUMNS
+	
+	@Id
+	@Column(name="id")
+	int id;
+	
+	@Column(name="first_name")
+	private String firstName;
+	
+	@Column(name="last_name")
+	private String lastName;
+	
+	@Column(name="email")
+	private String email;
+	
+	
+	//create constructors
+	
+	//no parameter constructor
+	public Instructor() {
+		
+	}
+	//with parameter constructor
+	public Instructor(String fn, String ln, String em) {
+		
+		this.setFirstName(fn); // this.firstName =fn;
+		this.setLastName(ln); // this.last_name =ln;
+		this.setEmail(em); //this.email =em;
+
+		
+	}
+	
+	//GENERATE GETTERS AND SETTERS
+	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
+
+	
+	
+	
+}
+
+
+
+############
+APPLICATION 
+############
+
+package entity;
+
+//import for Session import org.hibernat... by hrishikesh kanabar - Teachers
+
+//import for Session
+import org.hibernate.Session;
+//import for Session Factory
+import org.hibernate.SessionFactory;
+//import for configuration
+import org.hibernate.cfg.Configuration;
+
+
+public class InstructorApp {
+
+	public static void main(String[] args) {
+		
+		// create session factory
+		// This crated one object per application or class
+		SessionFactory Factory = new Configuration()
+		// Reads all connection configuration
+		.configure("hibernate.cfg.xml")
+		// Read our mapping
+		.addAnnotatedClass(Instructor.class)
+		.buildSessionFactory();
+		
+		
+		
+		//create session
+		
+		Session sess = Factory.getCurrentSession();
+		
+		try {
+			//Create Instructor object
+			System.out.println("CREATING INSTRUCTOR OBJECT......");
+			
+			Instructor ins= new Instructor("AZIEL", "SILAO","mail@gmail.com");
+
+			
+			//START TRANSACTION TO TAKE VALUES TO JAVA
+			//START TRANSACTION
+			sess.beginTransaction();
+			System.out.println("SAVING /INSERTING INSTRUCTOR OBJECT......");
+			
+			
+			//SAVE STUDENT OBJ FROM JAVA TO DATABASE - INSERT DATA 
+			sess.save(ins);
+			
+			//END TRANSACTION BY COMMITTING OBJ DATA IN TABLE
+			sess.getTransaction().commit();
+			
+			System.out.println("DATA STORED TO DATABASE SUCCESSFULLY!!");
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		
+		}finally {
+			Factory.close();
+		}
+
+		
+	}
+
+
+
+		
+		
+		
+	}
+
+
+
